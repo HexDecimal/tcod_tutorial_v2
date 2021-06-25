@@ -484,8 +484,6 @@ class AreaRangedAttackHandler(SelectIndexHandler):
 
 class MainGameEventHandler(EventHandler):
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
-        action: Optional[game.actions.Action] = None
-
         key = event.sym
         modifier = event.mod
 
@@ -496,9 +494,9 @@ class MainGameEventHandler(EventHandler):
 
         if key in MOVE_KEYS:
             dx, dy = MOVE_KEYS[key]
-            action = game.actions.Bump(player, dx, dy)
+            return game.actions.Bump(player, dx=dx, dy=dy)
         elif key in WAIT_KEYS:
-            action = game.actions.WaitAction(player)
+            return game.actions.Wait(player)
 
         elif key == tcod.event.K_ESCAPE:
             raise SystemExit()
@@ -506,7 +504,7 @@ class MainGameEventHandler(EventHandler):
             return HistoryViewer(self.engine)
 
         elif key == tcod.event.K_g:
-            action = game.actions.PickupAction(player)
+            return game.actions.Pickup(player)
 
         elif key == tcod.event.K_i:
             return InventoryActivateHandler(self.engine)
@@ -517,8 +515,7 @@ class MainGameEventHandler(EventHandler):
         elif key == tcod.event.K_SLASH:
             return LookHandler(self.engine)
 
-        # No valid key was pressed
-        return action
+        return None
 
 
 class GameOverEventHandler(EventHandler):
