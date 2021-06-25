@@ -32,7 +32,7 @@ class Action:
         raise NotImplementedError()
 
 
-class PickupAction(Action):
+class Pickup(Action):
     """Pickup an item and add it to the inventory, if there is room for it."""
 
     def __init__(self, entity: game.entity.Actor):
@@ -95,12 +95,12 @@ class EquipAction(Action):
         self.entity.equipment.toggle_equip(self.item)
 
 
-class WaitAction(Action):
+class Wait(Action):
     def perform(self) -> None:
         pass
 
 
-class TakeStairsAction(Action):
+class TakeStairs(Action):
     def perform(self) -> None:
         """
         Take the stairs, if any exist at the entity's location.
@@ -138,7 +138,7 @@ class ActionWithDirection(Action):
         raise NotImplementedError()
 
 
-class MeleeAction(ActionWithDirection):
+class Melee(ActionWithDirection):
     def perform(self) -> None:
         target = self.target_actor
         if not target:
@@ -179,7 +179,6 @@ class Move(ActionWithDirection):
 class Bump(ActionWithDirection):
     def perform(self) -> None:
         if self.target_actor:
-            return MeleeAction(self.entity, self.dx, self.dy).perform()
-
+            return Melee(self.entity, self.dx, self.dy).perform()
         else:
             return Move(self.entity, self.dx, self.dy).perform()
