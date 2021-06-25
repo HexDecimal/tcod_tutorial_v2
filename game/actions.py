@@ -85,7 +85,7 @@ class DropItem(ItemAction):
         self.entity.inventory.drop(self.item)
 
 
-class EquipAction(Action):
+class Equip(Action):
     def __init__(self, entity: game.entity.Actor, item: game.entity.Item):
         super().__init__(entity)
 
